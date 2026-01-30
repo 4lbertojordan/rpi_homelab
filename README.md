@@ -4,7 +4,7 @@
  This repo groups multiple Docker Compose stacks (valid to used from Portainer or CLI) to run services on my Raspberry Pi 
 
 My cable network is as follows: (Wifi, Zigbee, bluetooth and IoT devices are not included in the diagram)
- ![](./images/fossflow_basic_net.svg)
+ ![](./images/fossflow-basic-net.png)
  
  ## How to deploy containers
  - **Portainer (recommended)**
