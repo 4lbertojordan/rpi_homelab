@@ -1,0 +1,12 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/settings/
+
+title: jordancodes rpi5 dashboard
+description: Homelab services hosted in my Raspberry Pi.
+
+showStats: true
+
+providers:
+  openweathermap: openweathermapapikey
+  weatherapi: weatherapiapikey

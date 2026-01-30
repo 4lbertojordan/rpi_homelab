@@ -1,0 +1,82 @@
+services:
+  samba:
+    build:
+      context: .
+      dockerfile: smb.dockerfile
+    container_name: samba_server
+    restart: always
+    env_file:
+      - /data/.env.samba
+    volumes:
+      - /docker-services/samba/smb.conf:/etc/samba/smb.conf:ro
+      - /docker-services/samba/samba-data/lib:/var/lib/samba
+      - /docker-services/samba/samba-data/log:/var/log/samba
+      - /mnt/usb1/data_net/general:/general
+      - /mnt/usb1/data_net/music:/music
+      - /mnt/usb1/data_net/pcgames:/pcgames
+      - /mnt/usb1/data_net/tvshows:/tvshows
+      - /mnt/usb1/data_net/movies:/movies
+      - /mnt/usb1/data_net/console:/console
+      - /mnt/usb1/data_net/pcsoftware:/pcsoftware
+      - /mnt/usb1/data_net/books:/books
+      - /mnt/usb1/data_net/savegame:/savegame
+      - /mnt/usb1/qbittorrent/downloads:/downloads
+    ports:
+      - "445:445"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+  samba_retro:
+    build:
+      context: .
+      dockerfile: smb_retro.dockerfile
+    container_name: samba_retro
+    restart: always
+    env_file:
+      - /data/.env.samba
+    networks:
+      retro_net:
+        ipv4_address: X.X.X.193
+    environment:
+      - TZ=Europe/Madrid
+    volumes:
+      - /docker-services/samba/smb_retro.conf:/etc/samba/smb.conf:ro
+      - /mnt/usb1/data_net/pcgames:/pcgames
+      - /mnt/usb1/data_net/pcsoftware:/pcsoftware
+      - /mnt/usb1/data_net/savegame:/savegame
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+  samba_timemachine:
+    build:
+      context: .
+      dockerfile: smb.dockerfile
+    container_name: samba_timemachine
+    restart: always
+    env_file:
+      - /data/.env.samba
+    networks:
+      retro_net:
+        ipv4_address: X.X.X.194
+    environment:
+      - TZ=Europe/Madrid
+    volumes:
+      - /docker-services/samba/smb_timemachine.conf:/etc/samba/smb.conf:ro
+      - /mnt/usb2/timemachine:/timemachine
+      - /docker-services/samba/samba-data/log_tm:/var/log/samba
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+networks:
+  retro_net:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: X.X.X.0/24
+          gateway: X.X.X.1
+          ip_range: X.X.X.192/29

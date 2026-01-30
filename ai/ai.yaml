@@ -1,0 +1,15 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    volumes:
+      - /docker-services/open-webui:/app/backend/data
+    ports:
+      - "64008:8080"
+    restart: unless-stopped
+    environment:
+      OLLAMA_BASE_URL: "http://X.X.X.119:11434"
+    deploy:
+      resources:
+        limits:
+          memory: 1024M

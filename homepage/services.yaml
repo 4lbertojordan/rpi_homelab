@@ -1,0 +1,157 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+
+- Monitoring:
+        - Grafana:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/960px-Grafana_logo.svg.png"
+                href: "http://X.X.X.161:64017"
+                description: Monitoring dashboards
+                server: my-docker
+                container: grafana
+        - Prometheus:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Prometheus_software_logo.svg/1280px-Prometheus_software_logo.svg.png"
+                description: Monitoring database
+                server: my-docker
+                container: prometheus
+        - Loki:
+                icon: "https://elpuig.xeill.net/Members/vcarceler/articulos/introduccion-a-la-monitorizacion-con-grafana-y-loki/logo-1.png/@@images/13dd22a2-267b-4821-99ed-3e153d86ce7c.png"
+                description: Logging tool
+                server: my-docker
+                container: loki
+        - Alloy:
+                icon: "https://grafana.com/media/docs/alloy/alloy_icon.png"
+                href: "http://X.X.X.161:64018"
+                description: Metrics scraping
+                server: my-docker
+                container: alloy
+        - cAdvisor:
+                icon: "https://images.chainguard.dev/logos/cadvisor.svg"
+                description: Container monitoring tool
+                server: my-docker
+                container: cadvisor
+
+- SRE-tools:
+        - Excalidraw:
+                icon: "https://raw.githubusercontent.com/excalidraw/excalidraw/0586fc138cc3e1ed893d5204af78a13a352fffc6/dev-docs/static/img/logo.svg"
+                href: "http://X.X.X.161:64012"
+                description: Diagrams
+                server: my-docker
+                container: excalidraw
+        - IT-tools:
+                icon: "https://cdn-icons-png.flaticon.com/512/4709/4709000.png"
+                href: "http://X.X.X.161:64011"
+                description: It-tools
+                server: my-docker
+                container: it-tools
+        - Fossflow:
+                href: "http://X.X.X.161:64010"
+                description: Isometric diagramming tool
+                server: my-docker
+                container: fossflow
+
+- IoT:
+        - Home-Assistant:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/New_Home_Assistant_logo.svg/2048px-New_Home_Assistant_logo.svg.png"
+                href: "http://X.X.X.161:8123"
+                description: Home Assistant server
+                server: my-docker
+                container: homeassistant
+        - Matter-server:
+                icon: "https://github.com/matter-js/python-matter-server/raw/main/docs/matter_logo.svg"
+                description: Matter Server
+                server: my-docker
+                container: matter-server
+        - Node-red:
+                icon: "https://nodered.org/about/resources/media/node-red-icon-2.png"
+                href: "http://X.X.X.161:64013"
+                description: It-tools
+                server: my-docker
+                container: node-red
+
+- Media server:
+        - Navidrome:
+                icon: "https://avatars.githubusercontent.com/u/26692192?v=4"
+                href: "http://X.X.X.161:64004"
+                description: Streaming music
+                server: my-docker
+                container: navidrome
+        - Jellyfin:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Jellyfin_-_icon-transparent.svg/1200px-Jellyfin_-_icon-transparent.svg.png"
+                href: "http://X.X.X.161:64002"
+                description: Jellyfin server
+                server: my-docker
+                container: jellyfin
+        - FreshRSS:
+                icon: "https://freshrss.org/images/icon.svg"
+                href: "http://X.X.X.161:64001"
+                description: RSS client
+                server: my-docker
+                container: freshrss
+
+- Automations:
+        - n8n:
+                icon: "https://docs.n8n.io/_images/n8n-docs-icon.svg"
+                href: "http://X.X.X.161:64015"
+                description: Postgres instance.
+                server: my-docker
+                container: n8n
+
+- Networking:
+        - DuckDNS:
+                icon: "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/duckdns.png"
+                description: Free dynamic DNS
+                server: my-docker
+                container: duckdns
+
+- Downloads:
+        - qBittorrent:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/New_qBittorrent_Logo.svg/2048px-New_qBittorrent_Logo.svg.png"
+                href: "http://X.X.X.161:64005"
+                description: Bittorrent client
+                server: my-docker
+                container: qbittorrent
+
+- Raspberry server:
+        - Portainer:
+                icon: "https://cdn.worldvectorlogo.com/logos/portainer.svg"
+                href: "https://X.X.X.161:64003"
+                description: Container manager
+                server: my-docker
+                container: portainer
+        - Homepage:
+                icon: "https://raw.githubusercontent.com/gethomepage/homepage/refs/heads/dev/public/mstile-310x310.png"
+                href: "https://X.X.X.161:64200"
+                description: Rasbperry Pi Dashboard
+                server: my-docker
+                container: homepage
+
+- Files server:
+        - Samba:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Samba_logo_2010.svg/2560px-Samba_logo_2010.svg.png"
+                description: Self-hosted files server
+                server: my-docker
+                container: samba_server
+        - Samba Old PCs:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Samba_logo_2010.svg/2560px-Samba_logo_2010.svg.png"
+                description: Samba server for Win9x/XP
+                server: my-docker
+                container: samba_retro
+        - Samba Timemachine:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                description: TimeMachine Server
+                server: my-docker
+                container: samba_timemachine
+
+- Databases:
+        - Postgres:
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1163px-Postgresql_elephant.svg.png"
+                description: Postgres instance.
+                server: my-docker
+                container: postgres_db
+        - Adminer:
+                icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/adminer.png"
+                href: "http://X.X.X.161:64016"
+                description: Light databases client.
+                server: my-docker
+                container: adminer

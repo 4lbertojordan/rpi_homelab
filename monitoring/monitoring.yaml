@@ -1,0 +1,114 @@
+networks:
+  monitoring:
+    driver: bridge
+
+services:
+  grafana:
+    image: grafana/grafana:12.3.1-ubuntu
+    container_name: grafana
+    restart: unless-stopped
+    env_file:
+      - /data/.env.grafana
+    user: "1000:1000"
+    volumes:
+      - /docker-services/monitoring/grafana:/var/lib/grafana
+    ports:
+      - "64017:3000"
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+  prometheus:
+    image: prom/prometheus:v3.9.1
+    container_name: prometheus
+    restart: unless-stopped
+    user: "1000:1000"
+    volumes:
+      - /docker-services/monitoring/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /docker-services/monitoring/prometheus/data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+      - "--web.enable-remote-write-receiver"
+    expose:
+      - 9090
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+  loki:
+    image: grafana/loki:3.6.3
+    container_name: loki
+    restart: unless-stopped
+    user: "1000:1000"
+    command: -config.file=/etc/loki/local-config.yaml -compactor.retention-enabled=true
+    expose:
+      - 3100
+    volumes:
+      - /docker-services/monitoring/loki/data:/loki
+      - /docker-services/monitoring/loki/config/loki-config.yaml:/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    restart: unless-stopped
+    user: root
+    volumes:
+      - /docker-services/monitoring/alloy/config/config.river:/etc/alloy/config.river
+      - /docker-services/monitoring/alloy/data:/var/lib/alloy/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.river
+    ports:
+      - "64018:12345"
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.55.1
+    container_name: cadvisor
+    restart: unless-stopped
+    user: root
+    privileged: true
+    devices:
+      - /dev/kmsg
+    command:
+      - "-housekeeping_interval=10s"
+      - "-docker_only=true"
+      - "-disable_metrics=percpu,sched,tcp,udp,diskIO"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    expose:
+      - 8080
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 512M

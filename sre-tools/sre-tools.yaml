@@ -1,0 +1,38 @@
+services:
+  excalidraw:
+    image: excalidraw/excalidraw:latest
+    container_name: excalidraw
+    ports:
+      - 64012:80
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    ports:
+      - "64011:80"
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+  fossflow:
+    image: stnsmith/fossflow:latest
+    container_name: fossflow
+    pull_policy: always
+    ports:
+      - 64010:80
+    environment:
+      - NODE_ENV=production
+      - ENABLE_SERVER_STORAGE=${ENABLE_SERVER_STORAGE:-true}
+      - STORAGE_PATH=/data/diagrams
+      - ENABLE_GIT_BACKUP=${ENABLE_GIT_BACKUP:-false}
+    volumes:
+      - /docker-services/fossflow:/data/diagram
+    deploy:
+      resources:
+        limits:
+          memory: 128M

@@ -1,0 +1,23 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    user: "1000:1000"
+    group_add:
+      - "992"
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: X.X.X.161:64200
+      PUID: 1000
+      PGID: 1000
+    ports:
+      - 64200:3000
+    volumes:
+      - /docker-services/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/usb1:/mnt/usb1
+      - /mnt/rpibck:/mnt/rpibck
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 192M

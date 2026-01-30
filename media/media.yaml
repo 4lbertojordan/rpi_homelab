@@ -1,0 +1,61 @@
+---
+services:
+  jellyfin:
+    image: linuxserver/jellyfin:10.11.5
+    container_name: jellyfin
+    environment:
+      - PUID=995
+      - PGID=1001
+      - TZ=Etc/UTC
+      - JELLYFIN_PublishedServerUrl=http://X.X.X.161
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /docker-services/jellyfin/config:/config
+      - /mnt/usb1/data_net/tvshows:/data/tvshows
+      - /mnt/usb1/data_net/movies:/data/movies
+    ports:
+      - 64002:8096
+      - 8920:8920
+      - 7359:7359/udp
+      - 1900:1900/udp
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+  navidrome:
+    image: deluan/navidrome:0.59.0
+    container_name: navidrome
+    user: 995:1001
+    ports:
+      - "64004:4533"
+    restart: unless-stopped
+    environment:
+      ND_SCANSCHEDULE: 1h
+      ND_LOGLEVEL: info
+      ND_SESSIONTIMEOUT: 24h
+      ND_BASEURL: ""
+    volumes:
+      - "/docker-services/navidrome/data:/data"
+      - "/mnt/usb1/data_net/music:/music:ro"
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+  freshrss:
+    image: lscr.io/linuxserver/freshrss:1.27.1
+    container_name: freshrss
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /docker-services/freshrss/config:/config
+    ports:
+      - 64001:80
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64M

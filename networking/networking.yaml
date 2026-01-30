@@ -1,0 +1,19 @@
+services:
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:latest
+    container_name: duckdns
+    env_file:
+      - /data/.env.duckdns
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/MADRID
+      - SUBDOMAINS=${YOUR_DOMAIN}.duckdns.org
+      - LOG_FILE=true
+    volumes:
+      - /docker-services/duckdns/config:/config
+    deploy:
+      resources:
+        limits:
+          memory: 12M
+    restart: unless-stopped

@@ -1,0 +1,28 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/info-widgets/
+
+- resources:
+    cpu: true
+    memory: true
+    cputemp: true
+    tempmin: 0
+    tempmax: 100
+    uptime: true
+    network: true
+
+- resources:
+    label: Storage
+    expanded: true
+    disk:
+      - /
+      - /mnt/usb1
+      - /mnt/rpibck
+
+- datetime:
+    text_size: m
+    locale: es
+    format:
+      dateStyle: long
+      timeStyle: long
+

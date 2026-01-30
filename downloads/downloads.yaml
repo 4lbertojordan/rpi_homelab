@@ -1,0 +1,23 @@
+---
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - WEBUI_PORT=64005
+      - TORRENTING_PORT=64181
+    volumes:
+      - /docker-services/qbittorrent/appdata:/config
+      - /mnt/usb1/qbittorrent/downloads:/downloads
+    ports:
+      - 64005:64005
+      - 64181:64181
+      - 64181:64181/udp
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256M

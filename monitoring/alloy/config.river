@@ -1,0 +1,56 @@
+// 1. LOGS: Descubrimiento y Envío a Loki
+// ======================================
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
+}
+
+loki.source.docker "docker_logs" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.docker.containers.targets
+  labels     = {"job" = "docker"}
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+
+// 2. MÉTRICAS: Host (Node Exporter integrado)
+// ===========================================
+prometheus.exporter.unix "host_rpi" {
+  // CORRECCIÓN: La configuración de disco va dentro de su propio bloque 'filesystem'
+  filesystem {
+    mount_points_exclude = "^/(sys|proc|dev|host|etc|var/lib/docker/.+)($|/)"
+  }
+}
+
+// 3. MÉTRICAS: Scrapers (Separados)
+// =================================
+
+// Scraper A: Host
+prometheus.scrape "metrics_host" {
+  targets         = prometheus.exporter.unix.host_rpi.targets
+  forward_to      = [prometheus.remote_write.local.receiver]
+  scrape_interval = "15s"
+  job_name        = "host_node"
+}
+
+// Scraper B: cAdvisor
+prometheus.scrape "metrics_cadvisor" {
+  targets = [{
+    __address__ = "cadvisor:8080",
+  }]
+  forward_to      = [prometheus.remote_write.local.receiver]
+  scrape_interval = "15s"
+  job_name        = "cadvisor"
+}
+
+// 4. ENVÍO: Prometheus Remoto
+// ===========================
+prometheus.remote_write "local" {
+  endpoint {
+    url = "http://prometheus:9090/api/v1/write"
+  }
+}

@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:18.1-alpine3.23
+    container_name: postgres_db
+    restart: always
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    env_file:
+      - /data/.env.postgres
+    volumes:
+      - /docker-services/postgres/data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+    networks:
+      - databases
+    command: >
+      postgres 
+      -c shared_buffers=64MB 
+      -c max_connections=50
+      -c work_mem=4MB
+      -c maintenance_work_mem=32MB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  adminer:
+    image: adminer:5.4.1-standalone
+    container_name: adminer
+    restart: always
+    environment:
+      - ADMINER_DESIGN=win98
+    ports:
+      - 64016:8080
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - databases
+
+networks:
+  databases:
+    external: true
