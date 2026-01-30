@@ -37,6 +37,10 @@ My cable network is as follows: (Wifi, Zigbee, bluetooth and IoT devices are not
  ## Notes
  - **Bind mounts to files** (e.g. Samba `smb.conf`) require the host file to exist and be a file.
  - Paths like `/your/path/to/docker-services/portainer/.env.*` or samba `smb.conf` files are host paths; ensure they exist on the node where you deploy.
+
+ ## Colaboration
+ - Pull requests are welcome.
+ - For major changes, please open an issue first to discuss what you would like to change.
  
  ## License
  MIT.
